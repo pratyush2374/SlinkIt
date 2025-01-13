@@ -1,3 +1,4 @@
+import ApiError from "@/utils/ApiError";
 import ApiResponse from "@/utils/ApiResponse";
 import asyncHandler from "@/utils/AsyncHandler";
 import prisma from "@/utils/PrismaClient";
@@ -30,13 +31,34 @@ const redirectLink = asyncHandler(async (req: Request, res: Response) => {
 const createLink = asyncHandler(async (req: Request, res: Response) => {
     const { alias, targetUrl, userId, altName } = req.body;
 
+    if (!alias || !targetUrl) {
+        return res
+            .status(400)
+            .json(new ApiError(400, "Alias or targetUrl not found"));
+    }
+
+    const aliasExists = await prisma.link.findUnique({
+        where: { alias },
+    });
+
+    if (aliasExists) {
+        return res.status(400).json(new ApiError(400, "Alias already exists"));
+    }
+
+    const alternateName = altName || "Link";
+
+    const linkData: any = {
+        alias,
+        altName: alternateName,
+        targetUrl,
+    };
+
+    if (userId) {
+        linkData.User = { connect: { id: userId } };
+    }
+
     const link = await prisma.link.create({
-        data: {
-            alias,
-            altName,
-            targetUrl,
-            User: { connect: { id: userId } },
-        },
+        data: linkData,
     });
 
     return res.status(200).json(new ApiResponse(200, link, "Link created"));
@@ -48,6 +70,11 @@ const getUserLinks = asyncHandler(async (req: Request, res: Response) => {
 
     const links = await prisma.link.findMany({
         where: { userId },
+        select : {
+            alias : true,
+            altName : true,
+            targetUrl : true
+        }
     });
 
     return res.status(200).json(new ApiResponse(200, links, "Links found"));
