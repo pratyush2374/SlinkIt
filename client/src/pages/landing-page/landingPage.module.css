@@ -1,0 +1,98 @@
+/* landingPage.module.css */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.logoContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.brandName {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333333;
+    margin: 0;
+}
+
+.navLinks {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.signInButton,
+.contactButton {
+    padding: 0.5rem 1rem;
+    border-radius: 3px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.signInButton {
+    background-color: #007bff;
+    border: none;
+    color: #ffffff;
+    font-family: inherit;
+}
+
+.signInButton:hover {
+    background-color: #005ec2;
+    color: #ffffff;
+}
+
+.contactButton {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.contactButton a {
+    text-decoration: none;
+    color: #000000;
+}
+
+.signInButton a {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 1rem;
+    }
+
+    .brandName {
+        font-size: 1.25rem;
+    }
+
+    .navLinks {
+        gap: 0.5rem;
+    }
+
+    .signInButton,
+    .contactButton {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+}
+
+
