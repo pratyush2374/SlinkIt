@@ -2,6 +2,7 @@ import axios from "axios";
 
 const signIn = async (email: string, password: string) => {
     try {
+        console.log(email);
         if (!email) {
             throw new Error("Email not found");
         } else {

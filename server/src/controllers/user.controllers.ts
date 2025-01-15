@@ -23,6 +23,16 @@ const sendCode = asyncHandler(async (req: Request, res: Response) => {
         return res.status(400).json(new ApiError(400, "Invalid email format"));
     }
 
+    const user = await prisma.user.findUnique({
+        where: { email },
+    });
+
+    if (user) {
+        return res
+            .status(400)
+            .json(new ApiError(400, "Email already exists please sign in"));
+    }
+
     const verifyCode = Math.floor(Math.random() * 10000);
 
     await sendVerifyCode(name, email, verifyCode);
