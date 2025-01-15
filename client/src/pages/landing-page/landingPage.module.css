@@ -74,6 +74,21 @@
     color: #ffffff;
 }
 
+.signOutButton {
+    padding: 0.5rem 1rem;
+    border-radius: 3px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    gap: 5px;
+    border: none;
+    font-family: inherit;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
 
 @media (max-width: 768px) {
     .navbar {
@@ -94,5 +109,3 @@
         font-size: 0.9rem;
     }
 }
-
-

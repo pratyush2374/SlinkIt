@@ -1,0 +1,104 @@
+.urlsContainer {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 80%;
+    padding-top: 10px;
+}
+
+.urlsTitle {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+.tableWrapper {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+.urlsTable {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+}
+
+.urlsTable th,
+.urlsTable td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.urlsTable th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+}
+
+.urlsTable tr:hover {
+    background-color: #f8f9fa;
+}
+
+.aliasCell {
+    width: 200px;
+}
+
+.shortUrl {
+    color: #0066cc;
+    font-family: monospace;
+    font-size: 0.9rem;
+}
+
+.targetCell {
+    max-width: 300px;
+}
+
+.targetUrl {
+    color: #666;
+    text-decoration: none;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.targetUrl:hover {
+    color: #0066cc;
+    text-decoration: underline;
+}
+
+.actionsCell {
+    width: 160px;
+    white-space: nowrap;
+}
+
+.actionButton {
+    padding: 0.5rem 1rem;
+    margin-right: 0.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: background-color 0.2s;
+}
+
+.copyButton {
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+.copyButton:hover {
+    background-color: #dee2e6;
+}
+
+.deleteButton {
+    background-color: #dc3545;
+    color: white;
+}
+
+.deleteButton:hover {
+    background-color: #c82333;
+}

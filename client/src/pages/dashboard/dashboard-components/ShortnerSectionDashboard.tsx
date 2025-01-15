@@ -1,15 +1,22 @@
 import { useForm } from "react-hook-form";
-import styles from "./component.module.css";
+import styles from "@/components/component.module.css";
 import { useState } from "react";
-import submitDataForShortening from "../services/linkShortner";
+import submitDataForShortening from "@/services/linkShortner";
 import { useToast } from "@/hooks/use-toast";
 
 type FormInputs = {
     longUrl: string;
     alias: string;
+    altName: string;
 };
 
-const ShortenerSection: React.FC = () => {
+type ShortenerSectionDashboardProps = {
+    setUserUrls: React.Dispatch<React.SetStateAction<any>>;
+};
+
+const ShortenerSectionDashboard: React.FC<ShortenerSectionDashboardProps> = ({
+    setUserUrls,
+}) => {
     const [urlShortened, setUrlShortened] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [alias, setAlias] = useState("");
@@ -27,7 +34,19 @@ const ShortenerSection: React.FC = () => {
         setAlias(data.alias);
         setUrlShortened(false);
         try {
-            await submitDataForShortening(data.longUrl, data.alias);
+            await submitDataForShortening(
+                data.longUrl,
+                data.alias,
+                data.altName
+            );
+            
+            // Add the new URL to the userUrls array
+            setUserUrls((prevUrls : any) => [...prevUrls, {
+                alias: data.alias,
+                altName: data.altName || "Link", 
+                targetUrl: data.longUrl
+            }]);
+
             toast({
                 title: "Success",
                 description: "Link Shortened Successfully",
@@ -69,7 +88,7 @@ const ShortenerSection: React.FC = () => {
             <div className={styles.contentContainer}>
                 <div
                     className={`${styles.headerContent} ${
-                        urlShortened && styles.short
+                        urlShortened && styles.shortDashboard
                     }`}
                 >
                     <img
@@ -127,6 +146,13 @@ const ShortenerSection: React.FC = () => {
                                 {errors.alias.message}
                             </span>
                         )}
+
+                        <input
+                            type="text"
+                            placeholder="Enter alternate name"
+                            className={styles.input}
+                            {...register("altName")}
+                        />
                     </div>
                     {urlShortened && (
                         <>
@@ -155,4 +181,4 @@ const ShortenerSection: React.FC = () => {
     );
 };
 
-export default ShortenerSection;
+export default ShortenerSectionDashboard;

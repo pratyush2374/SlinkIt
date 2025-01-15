@@ -70,14 +70,29 @@ const getUserLinks = asyncHandler(async (req: Request, res: Response) => {
 
     const links = await prisma.link.findMany({
         where: { userId },
-        select : {
-            alias : true,
-            altName : true,
-            targetUrl : true
-        }
+        select: {
+            alias: true,
+            altName: true,
+            targetUrl: true,
+        },
     });
 
     return res.status(200).json(new ApiResponse(200, links, "Links found"));
 });
 
-export { redirectLink, createLink, getUserLinks };
+//Deleting link by alias
+const deleteAlias = asyncHandler(async (req: Request, res: Response) => {
+    const { alias } = req.body;
+
+    if (!alias) {
+        return res.status(400).json(new ApiError(400, "Alias not found"));
+    }
+
+    const link = await prisma.link.delete({
+        where: { alias },
+    });
+
+    return res.status(200).json(new ApiResponse(200, link, "Link deleted"));
+});
+
+export { redirectLink, createLink, getUserLinks, deleteAlias};
