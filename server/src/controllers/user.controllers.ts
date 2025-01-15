@@ -204,6 +204,14 @@ const sendLinkForForgotPassword = asyncHandler(
                 .json(new ApiError(400, "Invalid email format"));
         }
 
+        const user = await prisma.user.findUnique({
+            where: { email },
+        });
+
+        if (!user) {
+            return res.status(400).json(new ApiError(400, "User not found"));
+        }
+
         const emailToken = jwt.sign(
             { email },
             process.env.FORGOT_PASSWORD_SECRET!,

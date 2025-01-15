@@ -15,7 +15,6 @@ const submitDataForShortening = async (
         );
         return response.data;
     } catch (error) {
-        console.log(error);
         if (axios.isAxiosError(error)) {
             if (error.response) {
                 throw error.response.data;
