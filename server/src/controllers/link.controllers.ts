@@ -53,8 +53,8 @@ const createLink = asyncHandler(async (req: Request, res: Response) => {
         targetUrl,
     };
 
-    if (userId) {
-        linkData.User = { connect: { id: userId } };
+    if (req.user?.id) {
+        linkData.User = { connect: { id: req.user.id } };
     }
 
     const link = await prisma.link.create({

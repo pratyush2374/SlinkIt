@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
 import styles from "./component.module.css";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch } from "../app/store";
-import { setSubmitting , setData} from "../features/form/formSlice";
+import { useState } from "react";
+import submitDataForShortening from "../services/linkShortner";
+import { useToast } from "@/hooks/use-toast";
 
 type FormInputs = {
     longUrl: string;
@@ -10,11 +10,11 @@ type FormInputs = {
 };
 
 const ShortenerSection: React.FC = () => {
+    const [urlShortened, setUrlShortened] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
+    const [alias, setAlias] = useState("");
+    const { toast } = useToast();
 
-    const submitting = useSelector((state: RootState) => state.form.submitting);
-    const data : FormInputs = useSelector((state: RootState) => state.form.data);
-    const dispatch = useDispatch<AppDispatch>();
-    
     const {
         register,
         handleSubmit,
@@ -22,16 +22,56 @@ const ShortenerSection: React.FC = () => {
         reset,
     } = useForm<FormInputs>();
 
-    const onSubmit = (data: FormInputs) => {
-        dispatch(setSubmitting(true));
-        dispatch(setData(data));
-        reset();
+    const onSubmit = async (data: FormInputs) => {
+        setSubmitting(true);
+        setAlias(data.alias);
+
+        try {
+            await submitDataForShortening(data.longUrl, data.alias);
+            toast({
+                title: "Success",
+                description: "Link Shortened Successfully",
+            });
+            setUrlShortened(true);
+            reset();
+        } catch (error: any) {
+            toast({
+                title: "Error",
+                description: error.data || "Something went wrong",
+                variant: "destructive",
+            });
+            console.log(error);
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    const copyToClipboard = () => {
+        try {
+            navigator.clipboard.writeText(
+                `${window.location.hostname}/${alias}`
+            );
+            toast({
+                title: "URL Copied!",
+                description: "Shortened URL has been copied to clipboard.",
+            });
+        } catch (error) {
+            toast({
+                title: "Error",
+                description: "Something went wrong while copying",
+                variant: "destructive",
+            });
+        }
     };
 
     return (
         <section className={styles.shortenerSection}>
             <div className={styles.contentContainer}>
-                <div className={styles.headerContent}>
+                <div
+                    className={`${styles.headerContent} ${
+                        urlShortened && styles.short
+                    }`}
+                >
                     <img
                         src="/SlinkIt.svg"
                         alt="Link Icon"
@@ -88,13 +128,26 @@ const ShortenerSection: React.FC = () => {
                             </span>
                         )}
                     </div>
-
+                    {urlShortened && (
+                        <>
+                            <div
+                                className={styles.successShort}
+                                onClick={copyToClipboard}
+                            >
+                                <img src="/Copy.svg" alt="Copy" />
+                                <h2>{`${window.location.hostname}/${alias}`}</h2>
+                            </div>
+                            <p className={styles.copyMessage}>
+                                Click to copy !
+                            </p>
+                        </>
+                    )}
                     <button
                         type="submit"
                         className={styles.shortenButton}
                         disabled={isSubmitting}
                     >
-                        {isSubmitting ? "Shortening..." : "Shorten"}
+                        {submitting ? "Shortening..." : "Shorten"}
                     </button>
                 </form>
             </div>
