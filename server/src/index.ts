@@ -13,8 +13,10 @@ const app = express();
 // Middleware
 app.use(
     cors({
-        origin: "http://localhost:5173",
+        origin: `${process.env.CLIENT_URL}`,
         credentials: true,
+        methods: ['GET', 'POST', 'OPTIONS', 'DELETE'],
+        allowedHeaders: ['Content-Type', 'Authorization']
     })
 );
 app.use(cookieParser());

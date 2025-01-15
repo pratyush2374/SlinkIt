@@ -1,0 +1,55 @@
+.container {
+    min-height: 100vh;
+    background-color: rgb(249, 250, 251);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.content {
+    text-align: center;
+}
+
+.content>*+* {
+    margin-top: 1.5rem;
+}
+
+.errorCode {
+    font-size: 6rem;
+    font-weight: 700;
+    color: rgb(17, 24, 39);
+}
+
+.textContainer {
+    margin-top: 0.5rem;
+}
+
+.textContainer>*+* {
+    margin-top: 0.5rem;
+}
+
+.title {
+    font-size: 1.875rem;
+    font-weight: 600;
+    color: rgb(31, 41, 55);
+}
+
+.description {
+    color: rgb(75, 85, 99);
+}
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: rgb(37, 99, 235);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s;
+}
+
+.button:hover {
+    background-color: rgb(29, 78, 216);
+}

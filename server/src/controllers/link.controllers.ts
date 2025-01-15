@@ -6,7 +6,7 @@ import { Request, Response } from "express";
 
 // Redirect to link
 const redirectLink = asyncHandler(async (req: Request, res: Response) => {
-    const alias = req.query.alias as string;
+    const { alias } = req.body;
 
     if (!alias) {
         return res
@@ -20,16 +20,19 @@ const redirectLink = asyncHandler(async (req: Request, res: Response) => {
     });
 
     if (!link) {
-        const notFoundURL = process.env.CLIENT_URL + "/not-found";
-        return res.redirect(notFoundURL);
+        return res
+            .status(404)
+            .json(new ApiResponse(404, null, "Link not found"));
     }
-
-    return res.redirect(link.targetUrl);
+    const linkToSend = {
+        redirectUrl: link.targetUrl,
+    };
+    return res.status(200).json(new ApiResponse(200, linkToSend, "Link found"));
 });
 
 // Create a link
 const createLink = asyncHandler(async (req: Request, res: Response) => {
-    const { alias, targetUrl, userId, altName } = req.body;
+    const { alias, targetUrl, altName } = req.body;
 
     if (!alias || !targetUrl) {
         return res
@@ -95,4 +98,4 @@ const deleteAlias = asyncHandler(async (req: Request, res: Response) => {
     return res.status(200).json(new ApiResponse(200, link, "Link deleted"));
 });
 
-export { redirectLink, createLink, getUserLinks, deleteAlias};
+export { redirectLink, createLink, getUserLinks, deleteAlias };

@@ -5,7 +5,7 @@ import addUser from "@/middlewares/addUser.middleware";
 
 const linkRouter = Router();
 
-linkRouter.get("/redirect", redirectLink);
+linkRouter.post("/redirect", redirectLink);
 linkRouter.post("/create", addUser, createLink);
 linkRouter.get("/get-user-links", verifyJwt, getUserLinks);
 linkRouter.delete("/delete-alias", verifyJwt, deleteAlias);

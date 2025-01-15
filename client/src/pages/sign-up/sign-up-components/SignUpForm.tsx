@@ -298,18 +298,6 @@ const SignUpForm: React.FC = () => {
                             Already have an account?{" "}
                             <a href="/sign-in">Sign In</a>
                         </p>
-
-                        <div className={styles.socialLogin}>
-                            <p>— OR —</p>
-                            <div className={styles.google}>
-                                <img
-                                    src="/Google.svg"
-                                    alt="Google Icon"
-                                    className={styles.googleIcon}
-                                />
-                                Sign up with Google
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

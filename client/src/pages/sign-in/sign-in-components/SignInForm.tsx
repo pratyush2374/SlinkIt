@@ -20,7 +20,6 @@ const SignInForm = () => {
         reset,
     } = useForm<SignInFormData>();
 
-    const [isGoogleLoading, setIsGoogleLoading] = useState(false);
     const [userEmail, setUserEmail] = useState<string>("");
 
     const { toast } = useToast();
@@ -33,17 +32,15 @@ const SignInForm = () => {
                 description: "Signed in successfully",
             });
             window.location.href = "/dashboard";
-        } catch (error : any) {
+        } catch (error: any) {
             toast({
                 title: "Error",
-                description: error.data || "An unexpected error occurred. Please try again.",
+                description:
+                    error.data ||
+                    "An unexpected error occurred. Please try again.",
                 variant: "destructive",
             });
         }
-    };
-
-    const handleGoogleSignIn = async () => {
-        setIsGoogleLoading(true);
     };
 
     const sendForgotPasswordEmail = async () => {
@@ -156,27 +153,6 @@ const SignInForm = () => {
                     <p className={styles.signupLink}>
                         Don't have an account? <a href="/sign-up">Sign up</a>
                     </p>
-
-                    <div className={styles.socialLogin}>
-                        <p>— OR —</p>
-                        <button
-                            type="button"
-                            onClick={handleGoogleSignIn}
-                            disabled={isGoogleLoading}
-                            className={`${styles.google} ${
-                                isGoogleLoading ? styles.loading : ""
-                            }`}
-                        >
-                            <img
-                                src="/Google.svg"
-                                alt="Google icon"
-                                className={styles.googleIcon}
-                            />
-                            {isGoogleLoading
-                                ? "Signing in..."
-                                : "Sign in with Google"}
-                        </button>
-                    </div>
                 </div>
             </div>
         </div>
