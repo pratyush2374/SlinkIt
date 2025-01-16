@@ -56,7 +56,10 @@ Server will run on port 4173
 ```bash
 cd backend
 npm install
-npm start
+npm run bundle
+cd dist
+#rename server.js to server.cjs
+node server.cjs 
 ```
 Server will run on port 3000
 
@@ -65,15 +68,15 @@ Server will run on port 3000
 #### Frontend (.env)
 ```
 VITE_BACKEND_URL=http://localhost:3000
-VITE_FRONTEND_URL=http://localhost:5173
-VITE_FRONTEND_URL_PLAIN=localhost:5173
+VITE_FRONTEND_URL=http://localhost:4173
+VITE_FRONTEND_URL_PLAIN=localhost:4173
 ```
 
 #### Backend (.env)
 ```
 PORT=3000
 DATABASE_URL="postgresql://postgres:your_password@localhost:5432/SlinkIt"
-CLIENT_URL=http://localhost:5173
+CLIENT_URL=http://localhost:4173
 EMAIL_USER=your_email@example.com
 EMAIL_PASS=your_app_specific_password
 ACCESS_TOKEN_SECRET=your_access_token_secret

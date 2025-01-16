@@ -5,18 +5,22 @@
     "type": "module",
     "main": "index.js",
     "scripts": {
-        "start": "nodemon --exec tsx src/index.ts"
+        "start": "nodemon --exec tsx src/index.ts",
+        "bundle": "node bundle.js"
     },
     "author": "Pratyush Sharma",
     "license": "ISC",
     "dependencies": {
         "@prisma/client": "^6.2.1",
+        "aws-sdk": "^2.1692.0",
         "bcrypt": "^5.1.1",
         "cookie-parser": "^1.4.7",
         "cors": "^2.8.5",
         "dotenv": "^16.4.7",
         "express": "^4.21.2",
         "jsonwebtoken": "^9.0.2",
+        "mock-aws-s3": "^4.0.2",
+        "nock": "^13.5.6",
         "nodemailer": "^6.9.16"
     },
     "devDependencies": {
@@ -28,6 +32,7 @@
         "@types/jsonwebtoken": "^9.0.7",
         "@types/node": "^22.10.5",
         "@types/nodemailer": "^6.4.17",
+        "esbuild": "^0.24.2",
         "prisma": "^6.2.1",
         "ts-node": "^10.9.2",
         "ts-node-dev": "^2.0.0",
