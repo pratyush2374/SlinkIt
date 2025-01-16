@@ -14,6 +14,7 @@ import Dashboard from "./pages/dashboard/page";
 import NotFound from "./pages/not-found/page";
 import axios from "axios";
 import Loading from "./components/Loading";
+import ResetPassword from "./pages/reset-password/page";
 
 // Create auth context
 const AuthContext = createContext<{
@@ -142,6 +143,7 @@ const App: React.FC = () => {
                         }
                     />
                     <Route path="/not-found" element={<NotFound />} />
+                    <Route path="/reset-password" element={<ResetPassword />} />
                     <Route path="*" element={<CatchAllRoute />} />
                 </Routes>
             </Router>

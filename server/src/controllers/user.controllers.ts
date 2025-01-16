@@ -239,34 +239,89 @@ const sendLinkForForgotPassword = asyncHandler(
 );
 
 // Controller for resetting password
-const resetPassword = asyncHandler(async (req: Request, res: Response) => {
-    const { token, email, newPassword } = req.body;
+interface JwtPayload {
+    email: string;
+    iat?: number;
+    exp?: number;
+}
 
-    if (!email || !newPassword || !token) {
+const resetPassword = asyncHandler(async (req: Request, res: Response) => {
+    const { token, password } = req.body;
+
+    if (!password || !token) {
         return res
             .status(400)
-            .json(new ApiError(400, "Email, password or token not found"));
+            .json(new ApiError(400, "Password and token are required"));
     }
 
-    const emailToken = jwt.verify(
-        token,
-        process.env.FORGOT_PASSWORD_SECRET!
-    ) as { email: string };
+    try {
+        // Verify the token
+        const decodedToken = jwt.verify(
+            token,
+            process.env.FORGOT_PASSWORD_SECRET!
+        ) as JwtPayload;
 
-    if (emailToken.email !== email) {
-        return res.status(400).json(new ApiError(400, "Invalid token"));
+        if (!decodedToken.email) {
+            return res
+                .status(400)
+                .json(new ApiError(400, "Invalid token format"));
+        }
+
+        // Check if user exists
+        const existingUser = await prisma.user.findUnique({
+            where: { email: decodedToken.email },
+        });
+
+        if (!existingUser) {
+            return res.status(404).json(new ApiError(404, "User not found"));
+        }
+
+        // Hash the new password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Update the password
+        await prisma.user.update({
+            where: { email: decodedToken.email },
+            data: { password: hashedPassword },
+        });
+
+        return res
+            .status(200)
+            .json(
+                new ApiResponse(
+                    200,
+                    { email: decodedToken.email },
+                    "Password reset successfully"
+                )
+            );
+    } catch (error) {
+        // Handle specific JWT errors
+        if (error instanceof jwt.JsonWebTokenError) {
+            if (error.name === "TokenExpiredError") {
+                return res
+                    .status(401)
+                    .json(new ApiError(401, "Reset token has expired"));
+            }
+            return res
+                .status(401)
+                .json(new ApiError(401, "Invalid reset token"));
+        }
+
+        // Handle Prisma errors
+        if (
+            error instanceof Error &&
+            error.name === "PrismaClientKnownRequestError"
+        ) {
+            return res
+                .status(500)
+                .json(new ApiError(500, "Database error occurred"));
+        }
+
+        // For any other unexpected errors
+        return res
+            .status(500)
+            .json(new ApiError(500, "Error resetting password"));
     }
-
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-    await prisma.user.update({
-        where: { email },
-        data: { password: hashedPassword },
-    });
-
-    return res
-        .status(200)
-        .json(new ApiResponse(200, null, "Password reset successfully"));
 });
 
 export {
