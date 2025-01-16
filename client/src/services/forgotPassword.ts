@@ -2,7 +2,6 @@ import axios from "axios";
 
 const forgotPassword = async (email: string) => {
     try {
-        console.log(email);
         if (!email) {
             throw new Error("Email not found");
         } else {

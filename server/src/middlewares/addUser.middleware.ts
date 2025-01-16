@@ -4,7 +4,8 @@ import { Request, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
 const addUser = asyncHandler(async (req: Request, _, next: NextFunction) => {
-    const token = req.headers.authorization?.split(" ")[1] || req.cookies?.accessToken;
+    const token =
+        req.headers.authorization?.split(" ")[1] || req.cookies?.accessToken;
 
     // If no token exists, continue without user
     if (!token) {
@@ -30,7 +31,6 @@ const addUser = asyncHandler(async (req: Request, _, next: NextFunction) => {
         req.user = user;
         return next();
     } catch (error) {
-        // If token verification fails, continue without user
         return next();
     }
 });

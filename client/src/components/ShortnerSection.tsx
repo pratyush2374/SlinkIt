@@ -40,7 +40,7 @@ const ShortenerSection: React.FC = () => {
                 description: error.data || "Something went wrong",
                 variant: "destructive",
             });
-            console.log(error);
+            console.error(error);
         } finally {
             setSubmitting(false);
         }

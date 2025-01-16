@@ -66,7 +66,7 @@ const SignInForm = () => {
                 description: error.data || "Something went wrong",
                 variant: "destructive",
             });
-            console.log(error);
+            console.error(error);
         }
     };
 

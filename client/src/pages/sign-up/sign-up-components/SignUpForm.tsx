@@ -67,7 +67,6 @@ const SignUpForm: React.FC = () => {
             }
 
             setVerifyCode(response.data.data.verifyCode);
-            console.log(response.data.data.verifyCode);
             toast({
                 title: "Success",
                 description: "OTP has been sent to your email!",
