@@ -40,6 +40,15 @@ const createLink = asyncHandler(async (req: Request, res: Response) => {
             .json(new ApiError(400, "Alias or targetUrl not found"));
     }
 
+    const targetUrlRegex =
+        /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w.-]*)*\/?$/;
+
+    if (!targetUrlRegex.test(targetUrl)) {
+        return res
+            .status(400)
+            .json(new ApiError(400, "Invalid targetUrl format"));
+    }
+
     const aliasExists = await prisma.link.findUnique({
         where: { alias },
     });

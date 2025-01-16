@@ -5,41 +5,50 @@ import {
     Navigate,
     useLocation,
 } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState, createContext, useContext } from "react";
 import Cookies from "js-cookie";
 import LandingPage from "./pages/landing-page/page";
 import SignIn from "./pages/sign-in/page";
 import SignUp from "./pages/sign-up/page";
 import Dashboard from "./pages/dashboard/page";
-import axios from "axios";
 import NotFound from "./pages/not-found/page";
+import axios from "axios";
+import Loading from "./components/Loading";
 
-// Protected Route Component
-const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-    const accessToken = Cookies.get("accessToken");
+// Create auth context
+const AuthContext = createContext<{
+    isAuthenticated: boolean;
+    token: string | null;
+    setToken: (token: string | null) => void;
+}>({
+    isAuthenticated: false,
+    token: null,
+    setToken: () => {},
+});
 
-    if (!accessToken) {
-        return <Navigate to="/sign-in" replace />;
+// Protected Route component
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+    const { isAuthenticated } = useContext(AuthContext);
+    const location = useLocation();
+
+    if (!isAuthenticated) {
+        return <Navigate to="/sign-in" state={{ from: location }} replace />;
     }
 
-    return children;
+    return <>{children}</>;
 };
 
-// Catch-all Route Component
 const CatchAllRoute = () => {
     const location = useLocation();
 
     useEffect(() => {
-        // Make sure to import axios
-
-        // Inside CatchAllRoute component:
         const checkRedirect = async () => {
             const notFoundUrl = `${
                 import.meta.env.VITE_FRONTEND_URL
             }/not-found`;
             try {
                 const response = await axios.post(
-                    "http://localhost:3000/api/link/redirect",
+                    `${import.meta.env.VITE_BACKEND_URL}/api/link/redirect`,
                     {
                         alias: location.pathname.slice(1),
                     },
@@ -77,26 +86,67 @@ const CatchAllRoute = () => {
     return <div>Loading......</div>;
 };
 
-function App() {
+const App: React.FC = () => {
+    const [token, setToken] = useState<string | null>(null);
+    const [isInitialized, setIsInitialized] = useState(false);
+
+    useEffect(() => {
+        const accessToken = Cookies.get("accessToken");
+        console.log("Cookie found:", accessToken);
+        setToken(accessToken || null);
+        setIsInitialized(true);
+    }, []);
+
+    if (!isInitialized) {
+        return <Loading />;
+    }
+
     return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<LandingPage />} />
-                <Route path="/sign-in" element={<SignIn />} />
-                <Route path="/sign-up" element={<SignUp />} />
-                <Route
-                    path="/dashboard"
-                    element={
-                        <ProtectedRoute>
-                            <Dashboard />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route path="/not-found" element={<NotFound />} />
-                <Route path="*" element={<CatchAllRoute />} />
-            </Routes>
-        </Router>
+        <AuthContext.Provider
+            value={{
+                isAuthenticated: !!token,
+                token,
+                setToken,
+            }}
+        >
+            <Router>
+                <Routes>
+                    <Route
+                        path="/"
+                        element={
+                            token ? (
+                                <Navigate to="/dashboard" />
+                            ) : (
+                                <LandingPage />
+                            )
+                        }
+                    />
+                    <Route
+                        path="/sign-in"
+                        element={
+                            token ? <Navigate to="/dashboard" /> : <SignIn />
+                        }
+                    />
+                    <Route
+                        path="/sign-up"
+                        element={
+                            token ? <Navigate to="/dashboard" /> : <SignUp />
+                        }
+                    />
+                    <Route
+                        path="/dashboard"
+                        element={
+                            <ProtectedRoute>
+                                <Dashboard />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route path="/not-found" element={<NotFound />} />
+                    <Route path="*" element={<CatchAllRoute />} />
+                </Routes>
+            </Router>
+        </AuthContext.Provider>
     );
-}
+};
 
 export default App;

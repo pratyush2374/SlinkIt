@@ -18,7 +18,7 @@ const UsersUrls: React.FC<UsersUrlsProps> = ({ userUrls, setUserUrls }) => {
     const { toast } = useToast();
     const handleCopy = async (alias: string) => {
         try {
-            const shortUrl = `localhost:3000/${alias}`;
+            const shortUrl = `${import.meta.env.VITE_FRONTEND_URL}/${alias}`;
             await navigator.clipboard.writeText(shortUrl);
             toast({
                 title: "URL Copied!",
@@ -85,7 +85,7 @@ const UsersUrls: React.FC<UsersUrlsProps> = ({ userUrls, setUserUrls }) => {
                             <tr key={index}>
                                 <td className={styles.aliasCell}>
                                     <span className={styles.shortUrl}>
-                                        localhost:3000/{url.alias}
+                                        {import.meta.env.VITE_FRONTEND_URL_PLAIN}/{url.alias}
                                     </span>
                                 </td>
                                 <td>{url.altName}</td>

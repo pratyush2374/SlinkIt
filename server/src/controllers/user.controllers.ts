@@ -87,7 +87,7 @@ const signUp = asyncHandler(async (req: Request, res: Response) => {
     });
 
     const cookieOptions = {
-        httpOnly: true,
+        httpOnly: false,
         secure: true,
     };
 
@@ -133,7 +133,7 @@ const signIn = asyncHandler(async (req: Request, res: Response) => {
     );
 
     const cookieOptions = {
-        httpOnly: true,
+        httpOnly: false,
         secure: true,
     };
 
@@ -159,7 +159,7 @@ const refreshBothTokens = asyncHandler(async (req: Request, res: Response) => {
     );
 
     const cookieOptions = {
-        httpOnly: true,
+        httpOnly: false,
         secure: true,
     };
 
@@ -186,7 +186,7 @@ const signOut = asyncHandler(async (req: Request, res: Response) => {
     });
 
     const cookieOptions = {
-        httpOnly: true,
+        httpOnly: false,
         secure: true,
     };
 

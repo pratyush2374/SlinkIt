@@ -39,13 +39,16 @@ const ShortenerSectionDashboard: React.FC<ShortenerSectionDashboardProps> = ({
                 data.alias,
                 data.altName
             );
-            
+
             // Add the new URL to the userUrls array
-            setUserUrls((prevUrls : any) => [...prevUrls, {
-                alias: data.alias,
-                altName: data.altName || "Link", 
-                targetUrl: data.longUrl
-            }]);
+            setUserUrls((prevUrls: any) => [
+                ...prevUrls,
+                {
+                    alias: data.alias,
+                    altName: data.altName || "Link",
+                    targetUrl: data.longUrl,
+                },
+            ]);
 
             toast({
                 title: "Success",
@@ -68,7 +71,7 @@ const ShortenerSectionDashboard: React.FC<ShortenerSectionDashboardProps> = ({
     const copyToClipboard = () => {
         try {
             navigator.clipboard.writeText(
-                `${window.location.hostname}/${alias}`
+                `${import.meta.env.VITE_FRONTEND_URL_PLAIN}/${alias}`
             );
             toast({
                 title: "URL Copied!",
@@ -112,7 +115,7 @@ const ShortenerSectionDashboard: React.FC<ShortenerSectionDashboardProps> = ({
                             {...register("longUrl", {
                                 required: "URL is required",
                                 pattern: {
-                                    value: /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
+                                    value: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w.-]*)*\/?$/,
                                     message: "Please enter a valid URL",
                                 },
                             })}
@@ -132,9 +135,14 @@ const ShortenerSectionDashboard: React.FC<ShortenerSectionDashboardProps> = ({
                             {...register("alias", {
                                 required: "Alias is required",
                                 pattern: {
-                                    value: /^[a-zA-Z0-9-_]+$/,
+                                    value: /^(?!.*\s)[a-zA-Z0-9-_]+$/,
                                     message:
-                                        "Alias can only contain letters, numbers, hyphens, and underscores",
+                                        "Alias can only contain letters, numbers, hyphens, and underscores (no spaces or special characters)",
+                                },
+                                maxLength: {
+                                    value: 30,
+                                    message:
+                                        "Alias must be less than 30 characters",
                                 },
                             })}
                         />
@@ -161,7 +169,9 @@ const ShortenerSectionDashboard: React.FC<ShortenerSectionDashboardProps> = ({
                                 onClick={copyToClipboard}
                             >
                                 <img src="/Copy.svg" alt="Copy" />
-                                <h2>{`${window.location.hostname}/${alias}`}</h2>
+                                <h2>{`${
+                                    import.meta.env.VITE_FRONTEND_URL_PLAIN
+                                }/${alias}`}</h2>
                             </div>
                             <p className={styles.copyMessage}>
                                 Click to copy !

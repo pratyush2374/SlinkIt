@@ -16,7 +16,7 @@ userRouter.post("/send-code", sendCode);
 userRouter.post("/sign-up", signUp);
 userRouter.post("/sign-in", signIn);
 userRouter.get("/refresh-tokens", verifyJwt, refreshBothTokens);
-userRouter.post("/sign-out", verifyJwt, signOut);
+userRouter.get("/sign-out", verifyJwt, signOut);
 userRouter.post("/send-forgot-password-link", sendLinkForForgotPassword);
 userRouter.post("/reset-password", resetPassword);
 

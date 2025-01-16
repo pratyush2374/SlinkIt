@@ -49,7 +49,7 @@ const ShortenerSection: React.FC = () => {
     const copyToClipboard = () => {
         try {
             navigator.clipboard.writeText(
-                `${window.location.hostname}/${alias}`
+                `${import.meta.env.VITE_FRONTEND_URL_PLAIN}/${alias}`
             );
             toast({
                 title: "URL Copied!",
@@ -93,7 +93,7 @@ const ShortenerSection: React.FC = () => {
                             {...register("longUrl", {
                                 required: "URL is required",
                                 pattern: {
-                                    value: /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
+                                    value: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w.-]*)*\/?$/,
                                     message: "Please enter a valid URL",
                                 },
                             })}
@@ -113,9 +113,14 @@ const ShortenerSection: React.FC = () => {
                             {...register("alias", {
                                 required: "Alias is required",
                                 pattern: {
-                                    value: /^[a-zA-Z0-9-_]+$/,
+                                    value: /^(?!.*\s)[a-zA-Z0-9-_]+$/,
                                     message:
-                                        "Alias can only contain letters, numbers, hyphens, and underscores",
+                                        "Alias can only contain letters, numbers, hyphens, and underscores (no spaces or special characters)",
+                                },
+                                maxLength: {
+                                    value: 30,
+                                    message:
+                                        "Alias must be less than 30 characters",
                                 },
                             })}
                         />
@@ -135,7 +140,9 @@ const ShortenerSection: React.FC = () => {
                                 onClick={copyToClipboard}
                             >
                                 <img src="/Copy.svg" alt="Copy" />
-                                <h2>{`${window.location.hostname}/${alias}`}</h2>
+                                <h2>{`${
+                                    import.meta.env.VITE_FRONTEND_URL_PLAIN
+                                }/${alias}`}</h2>
                             </div>
                             <p className={styles.copyMessage}>
                                 Click to copy !
