@@ -84,18 +84,83 @@ const CatchAllRoute = () => {
         checkRedirect();
     }, [location.pathname]);
 
-    return <div>Loading......</div>;
+    return <Loading />;
 };
 
 const App: React.FC = () => {
+    const refreshTokens = async () => {
+        try {
+            const response = await axios.get(
+                `${import.meta.env.VITE_BACKEND_URL}/api/user/refresh-tokens`,
+                { withCredentials: true }
+            );
+
+            if (response.status === 200) {
+                sessionStorage.setItem(
+                    "accessTokenExpiry",
+                    response.data.data.accessTokenExpiry.toString()
+                );
+                sessionStorage.setItem(
+                    "refreshTokenExpiry",
+                    response.data.data.refreshTokenExpiry.toString()
+                );
+            }
+        } catch (error: any) {
+            console.warn("Error refreshing tokens:");
+        }
+    };
+
+    const logout = async () => {
+        try {
+            await axios.get(
+                `${import.meta.env.VITE_BACKEND_URL}/api/user/sign-out`,
+                { withCredentials: true }
+            );
+        } catch (error) {
+            console.error("Error logging out");
+        }
+    };
+
     const [token, setToken] = useState<string | null>(null);
     const [isInitialized, setIsInitialized] = useState(false);
 
     useEffect(() => {
         const accessToken = Cookies.get("accessToken");
-        console.log("Cookie found:", accessToken);
         setToken(accessToken || null);
         setIsInitialized(true);
+    }, []);
+
+    useEffect(() => {
+        const refreshInterval = setInterval(async () => {
+            try {
+                const accessTokenExpiry = Number(
+                    sessionStorage.getItem("accessTokenExpiry")
+                );
+                const refreshTokenExpiry = Number(
+                    sessionStorage.getItem("refreshTokenExpiry")
+                );
+                const currentTime = Date.now();
+
+                if (refreshTokenExpiry <= currentTime) {
+                    // If the refresh token has expired, log out
+                    console.warn("Refresh token expired. Logging out.");
+                    logout();
+                    return; // Exit the function
+                }
+
+                if (accessTokenExpiry - currentTime <= 5 * 60 * 1000) {
+                    // If access token will expire in less than 5 minutes, refresh it
+                    await refreshTokens();
+                    const newAccessToken = Cookies.get("accessToken");
+                    setToken(newAccessToken || null);
+                }
+            } catch (error) {
+                console.error("Error refreshing token:", error);
+                logout();
+            }
+        }, 10 * 60 * 1000); // Run every 10 minutes
+
+        return () => clearInterval(refreshInterval); // Clean up on component unmount
     }, []);
 
     if (!isInitialized) {

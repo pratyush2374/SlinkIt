@@ -81,6 +81,9 @@ const signUp = asyncHandler(async (req: Request, res: Response) => {
         user.id
     );
 
+    const accessTokenExpiry = Date.now() + 1000 * 60 * 60 * 24;
+    const refreshTokenExpiry = Date.now() + 1000 * 60 * 60 * 24 * 7;
+
     const updatedUser = await prisma.user.update({
         where: { id: user.id },
         data: { refreshToken },
@@ -98,7 +101,11 @@ const signUp = asyncHandler(async (req: Request, res: Response) => {
         .json(
             new ApiResponse(
                 200,
-                { userId: updatedUser.id },
+                {
+                    userId: updatedUser.id,
+                    accessTokenExpiry,
+                    refreshTokenExpiry,
+                },
                 "User signed up successfully"
             )
         );
@@ -144,7 +151,10 @@ const signIn = asyncHandler(async (req: Request, res: Response) => {
         .json(
             new ApiResponse(
                 200,
-                { userId: user.id, refreshToken: user.refreshToken },
+                {
+                    accessTokenExpiry: Date.now() + 1000 * 60 * 60 * 24,
+                    refreshTokenExpiry: Date.now() + 1000 * 60 * 60 * 24 * 7,
+                },
                 "User signed in successfully"
             )
         );
@@ -158,6 +168,9 @@ const refreshBothTokens = asyncHandler(async (req: Request, res: Response) => {
         userId
     );
 
+    const refreshTokenExpiry = Date.now() + 1000 * 60 * 60 * 24 * 7;
+    const accessTokenExpiry = Date.now() + 1000 * 60 * 60 * 24;
+
     const cookieOptions = {
         httpOnly: false,
         secure: true,
@@ -170,7 +183,7 @@ const refreshBothTokens = asyncHandler(async (req: Request, res: Response) => {
         .json(
             new ApiResponse(
                 200,
-                { userId, refreshToken },
+                { accessTokenExpiry, refreshTokenExpiry },
                 "Tokens refreshed successfully"
             )
         );

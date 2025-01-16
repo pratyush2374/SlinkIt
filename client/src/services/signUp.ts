@@ -21,6 +21,14 @@ const signIn = async (email: string, password: string) => {
             );
 
             if (response.status === 200) {
+                sessionStorage.setItem(
+                    "accessTokenExpiry",
+                    response.data.data.accessTokenExpiry.toString()
+                );
+                sessionStorage.setItem(
+                    "refreshTokenExpiry",
+                    response.data.data.refreshTokenExpiry.toString()
+                );
                 return response.data;
             }
         }
