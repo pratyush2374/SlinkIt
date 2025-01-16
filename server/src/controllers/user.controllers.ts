@@ -94,6 +94,7 @@ const signUp = asyncHandler(async (req: Request, res: Response) => {
         httpOnly: false,
         secure: true,
         sameSite: "none",
+        path: '/',
     };
 
     return res
@@ -145,6 +146,7 @@ const signIn = asyncHandler(async (req: Request, res: Response) => {
         httpOnly: false,
         secure: true,
         sameSite: "none",
+        path: '/',
     };
 
     return res
@@ -178,6 +180,7 @@ const refreshBothTokens = asyncHandler(async (req: Request, res: Response) => {
         httpOnly: false,
         secure: true,
         sameSite: "none",
+        path: '/',
     };
 
     return res
@@ -206,6 +209,7 @@ const signOut = asyncHandler(async (req: Request, res: Response) => {
         httpOnly: false,
         secure: true,
         sameSite: "none",
+        path: '/',
     };
 
     return res

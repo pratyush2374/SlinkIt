@@ -16,6 +16,9 @@ import axios from "axios";
 import Loading from "./components/Loading";
 import ResetPassword from "./pages/reset-password/page";
 
+// Add this near the top of your App.tsx
+axios.defaults.withCredentials = true;
+
 // Create auth context
 const AuthContext = createContext<{
     isAuthenticated: boolean;
