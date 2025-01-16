@@ -5,8 +5,9 @@
     "type": "module",
     "main": "index.js",
     "scripts": {
-        "start": "nodemon --exec tsx src/index.ts",
-        "bundle": "node bundle.js"
+        "dev": "nodemon --exec tsx src/index.ts",
+        "bundle": "node bundle.js",
+        "start": "mv dist/server.js dist/server.cjs && node dist/server.cjs"
     },
     "author": "Pratyush Sharma",
     "license": "ISC",
