@@ -48,9 +48,9 @@ git clone https://github.com/pratyush2374/SlinkIt.git
 cd frontend
 npm install
 npm run build
-npm start
+npm run preview
 ```
-Server will run on port 5173
+Server will run on port 4173
 
 3. Backend Setup ⚙️
 ```bash
