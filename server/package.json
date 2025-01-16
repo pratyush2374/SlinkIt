@@ -6,7 +6,9 @@
     "main": "index.js",
     "scripts": {
         "dev": "nodemon --exec tsx src/index.ts",
+        "prebundle": "npm install",
         "bundle": "node bundle.js",
+        "prestart": "npm install",
         "start": "mv dist/server.js dist/server.cjs && node dist/server.cjs"
     },
     "author": "Pratyush Sharma",
