@@ -10,29 +10,16 @@ dotenv.config();
 
 const app = express();
 
-const allowedOrigins = [
-    "http://localhost:5173",
-    "http://localhost:4173",
-    "https://slinkit.netlify.app",
-];
-
 // Middleware
 app.use(
     cors({
-        origin: function (origin, callback) {
-            // Allow requests with no origin (like mobile apps, curl requests)
-            if (!origin) return callback(null, true);
-
-            if (allowedOrigins.indexOf(origin) === -1) {
-                const msg =
-                    "The CORS policy for this site does not allow access from the specified Origin.";
-                return callback(new Error(msg), false);
-            }
-            return callback(null, true);
-        },
+        origin: ["https://slinkit.netlify.app"],
         credentials: true,
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
     })
 );
+app.set("trust proxy", 1);
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

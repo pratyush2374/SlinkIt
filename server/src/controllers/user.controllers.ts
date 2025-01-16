@@ -8,6 +8,7 @@ import ApiError from "@/utils/ApiError";
 import generateAccessAndRefreshToken from "@/utils/generateTokens";
 import jwt from "jsonwebtoken";
 import sendForgotPasswordLink from "@/utils/SendForgotPasswordLink";
+import { CookieOptions } from "express";
 
 // Controller for sending verification code
 const sendCode = asyncHandler(async (req: Request, res: Response) => {
@@ -89,9 +90,10 @@ const signUp = asyncHandler(async (req: Request, res: Response) => {
         data: { refreshToken },
     });
 
-    const cookieOptions = {
+    const cookieOptions: CookieOptions = {
         httpOnly: false,
         secure: true,
+        sameSite: "none",
     };
 
     return res
@@ -139,9 +141,10 @@ const signIn = asyncHandler(async (req: Request, res: Response) => {
         user.id
     );
 
-    const cookieOptions = {
+    const cookieOptions: CookieOptions = {
         httpOnly: false,
         secure: true,
+        sameSite: "none",
     };
 
     return res
@@ -171,9 +174,10 @@ const refreshBothTokens = asyncHandler(async (req: Request, res: Response) => {
     const refreshTokenExpiry = Date.now() + 1000 * 60 * 60 * 24 * 7;
     const accessTokenExpiry = Date.now() + 1000 * 60 * 60 * 24;
 
-    const cookieOptions = {
+    const cookieOptions: CookieOptions = {
         httpOnly: false,
         secure: true,
+        sameSite: "none",
     };
 
     return res
@@ -198,9 +202,10 @@ const signOut = asyncHandler(async (req: Request, res: Response) => {
         data: { refreshToken: "" },
     });
 
-    const cookieOptions = {
+    const cookieOptions: CookieOptions = {
         httpOnly: false,
         secure: true,
+        sameSite: "none",
     };
 
     return res
