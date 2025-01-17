@@ -116,6 +116,7 @@ const signUp = asyncHandler(async (req: Request, res: Response) => {
 
 //Controller for signing in a user
 const signIn = asyncHandler(async (req: Request, res: Response) => {
+    console.log("Someone tried to sign in");
     const { email, password } = req.body;
 
     if (!email || !password) {
