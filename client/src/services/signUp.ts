@@ -20,12 +20,12 @@ const signIn = async (email: string, password: string) => {
             );
 
             if (response.status === 200) {
-                sessionStorage.setItem(
-                    "accessTokenExpiry",
+                localStorage.setItem(
+                    "ate",
                     response.data.data.accessTokenExpiry.toString()
                 );
-                sessionStorage.setItem(
-                    "refreshTokenExpiry",
+                localStorage.setItem(
+                    "rte",
                     response.data.data.refreshTokenExpiry.toString()
                 );
                 return response.data;

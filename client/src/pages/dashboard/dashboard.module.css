@@ -102,3 +102,50 @@
 .deleteButton:hover {
     background-color: #c82333;
 }
+
+@media (max-width: 767px) {
+    .urlsContainer {
+      padding: 1rem;
+      width: 90%;
+    }
+  
+    .urlsTitle {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+  
+    .tableWrapper {
+      overflow-x: auto;
+    }
+  
+    .urlsTable {
+      min-width: 600px;
+    }
+  
+    .urlsTable th,
+    .urlsTable td {
+      padding: 0.75rem;
+    }
+  
+    .aliasCell {
+      width: 150px;
+    }
+  
+    .shortUrl {
+      font-size: 0.8rem;
+    }
+  
+    .targetCell {
+      max-width: 200px;
+    }
+  
+    .actionsCell {
+      width: 120px;
+    }
+  
+    .actionButton {
+      padding: 0.4rem 0.8rem;
+      margin-right: 0.3rem;
+      font-size: 0.8rem;
+    }
+  }

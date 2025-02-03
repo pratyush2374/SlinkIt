@@ -6,6 +6,7 @@ import styles from "../signIn.module.css";
 import { useToast } from "@/hooks/use-toast";
 import forgotPassword from "@/services/forgotPassword";
 import signIn from "@/services/signIn";
+import { Link } from "react-router-dom";
 
 interface SignInFormData {
     email: string;
@@ -151,7 +152,7 @@ const SignInForm = () => {
                     </form>
 
                     <p className={styles.signupLink}>
-                        Don't have an account? <a href="/sign-up">Sign up</a>
+                        Don't have an account? <Link to="/sign-up">Sign up</Link>
                     </p>
                 </div>
             </div>

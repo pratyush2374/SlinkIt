@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "../landingPage.module.css";
+import { Link } from "react-router-dom";
 
 const LandingNavbar: React.FC = () => {
     return (
@@ -9,11 +10,8 @@ const LandingNavbar: React.FC = () => {
                 <p className={styles.brandName}>SlinkIt</p>
             </div>
             <div className={styles.navLinks}>
-                <p className={styles.contactButton}>
-                    <a href="/contact">Contact Us</a>
-                </p>
                 <button className={styles.signInButton}>
-                    <a href="/sign-in">Sign in / Sign up</a>
+                    <Link to="/sign-in">Sign in / Sign up</Link>
                 </button>
             </div>
         </nav>

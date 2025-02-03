@@ -150,6 +150,7 @@
 @media (max-width: 768px) {
     .shortenerSection {
         padding: 1rem;
+        min-height: 70vh;
     }
 
     .contentContainer {
