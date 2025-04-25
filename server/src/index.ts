@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 const PORT = process.env.PORT || 3000;
 
 // Routes
-app.get("/", (_, res: Response) => {
+app.get("/health", (_, res: Response) => {
     res.status(200).json(new ApiResponse(200, null, "Server is running"));
 });
 
